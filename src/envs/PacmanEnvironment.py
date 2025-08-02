@@ -114,7 +114,7 @@ class PacmanEnvironment(NESEnvironment):
                      digit_4 * 10000 +
                      digit_3 * 1000 +
                      digit_2 * 100 +
-                     digit_1) * 10
+                     digit_1 * 10)
 
             return score
         except Exception as e:
@@ -158,7 +158,7 @@ class PacmanEnvironment(NESEnvironment):
             reward += self.life_penalty
             print(f"Life lost! Lives remaining: {current_lives}, Penalty: {self.life_penalty}")
 
-        if current_level > self.previous_level:
+        if current_level != 255 and current_level > self.previous_level:
             reward += self.level_bonus
             print(f"New level started! Level: {current_level}, Bonus: {self.level_bonus}")
 
