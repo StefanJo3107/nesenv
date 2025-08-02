@@ -8,11 +8,9 @@ version = "0.0.1"
 dependencies = [
   "gymnasium",
   "numpy",
-  "opencv-python"
+  "opencv-python",
+  "stable-baselines3"
 ]
 
 [tool.hatch.build.targets.wheel]
 packages = ["nesenv"]
-
-[tool.hatch.build.targets.sdist]
-include = ["nesenv/"]

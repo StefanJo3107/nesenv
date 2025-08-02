@@ -12,6 +12,7 @@ class NESEmulatorClient:
 
     def load_rom(self, rom_path: str):
         """Load ROM."""
+        # noinspection PyUnresolvedReferences
         self.emu = nesrs.Emulator(rom_path, True)
 
     def reset(self):

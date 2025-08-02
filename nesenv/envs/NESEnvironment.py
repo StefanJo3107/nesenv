@@ -88,7 +88,7 @@ class NESEnvironment(gym.Env):
             raise RuntimeError(f"Failed to connect to NES emulator server: {e}")
 
     def _setup_action_space(self, action_map: Optional[List[List[int]]]):
-        """Setup the action space"""
+        """Set up the action space"""
         if action_map is None:
             self.action_map = [
                 [],
@@ -112,7 +112,7 @@ class NESEnvironment(gym.Env):
             self.action_space = spaces.Discrete(len(self.action_map))
 
     def _setup_observation_space(self):
-        """Setup the observation space"""
+        """Set up the observation space"""
         if self.grayscale:
             channels = 1
         else:
