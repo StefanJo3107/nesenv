@@ -1,14 +1,16 @@
 import time
 
-from src.envs.PacmanEnvironment import PacmanEnvironment
+import gymnasium
+import nesenv
 
 def test_pacman_environment():
     """Test the Pac-Man environment with score-based rewards."""
 
-    env = PacmanEnvironment(
+    env = gymnasium.make(
+        'nesenv/PacManEnv-v0',
         rom_path="/home/stefan/Dev/nesrs/assets/pacman-level1.cpu",
         frame_skip=100000,
-        frame_stack=1,
+        frame_stack=4,
         score_reward_scale=0.01,
         life_penalty=-100.0,
         level_bonus=1000.0,
@@ -40,9 +42,6 @@ def test_pacman_environment():
             print(f"Final score: {info['score']}")
             print(f"Total reward: {total_reward:.2f}")
             break
-
-    game_state = env.get_game_state()
-    print(f"Final game state: {game_state}")
 
     env.close()
 

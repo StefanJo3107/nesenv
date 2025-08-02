@@ -6,7 +6,7 @@ import gymnasium as gym
 import numpy as np
 from gymnasium import spaces
 
-from src.NESEmulatorClient import NESEmulatorClient
+from nesenv.emulator.NESEmulatorClient import NESEmulatorClient
 
 
 class NESEnvironment(gym.Env):
@@ -118,7 +118,6 @@ class NESEnvironment(gym.Env):
         else:
             channels = 3
 
-        # Stack multiple frames
         channels *= self.frame_stack
 
         self.observation_space = spaces.Box(
@@ -138,26 +137,22 @@ class NESEnvironment(gym.Env):
 
         if self.grayscale and len(frame.shape) == 3:
             frame = cv2.cvtColor(frame, cv2.COLOR_RGB2GRAY)
-            frame = np.expand_dims(frame, axis=-1)
 
         if frame.shape[:2] != self.resize_shape:
-            if len(frame.shape) == 3:
-                frame = cv2.resize(frame, (self.resize_shape[1], self.resize_shape[0]))
-            else:
-                frame = cv2.resize(frame, (self.resize_shape[1], self.resize_shape[0]))
-                frame = np.expand_dims(frame, axis=-1)
+            frame = cv2.resize(frame, (self.resize_shape[1], self.resize_shape[0]))
+
+        if len(frame.shape) == 2:
+            frame = np.expand_dims(frame, axis=-1)
 
         return frame.astype(np.uint8)
 
     def _get_observation(self) -> np.ndarray:
         """Get the current observation (stacked frames)."""
         if len(self.frame_buffer) == 0:
-            # Initialize with black frames
             for _ in range(self.frame_stack):
                 black_frame = self._preprocess_frame(None)
                 self.frame_buffer.append(black_frame)
 
-        # Stack frames along the channel dimension
         observation = np.concatenate(self.frame_buffer, axis=-1)
         return observation
 
@@ -182,7 +177,7 @@ class NESEnvironment(gym.Env):
 
         if frame is not None and prev_frame is not None:
             diff = np.mean(np.abs(frame.astype(np.float32) - prev_frame.astype(np.float32)))
-            return diff / 255.0 * 0.01  # Small reward for frame changes
+            return diff / 255.0 * 0.01
 
         return 0.0
 

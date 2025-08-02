@@ -1,12 +1,11 @@
-import time
 from typing import Tuple, Optional, List, Dict, Any
 
 import numpy as np
 
-from src.NESEnvironment import NESEnvironment
+from nesenv.envs.NESEnvironment import NESEnvironment
 
 
-class PacmanEnvironment(NESEnvironment):
+class PacManEnvironment(NESEnvironment):
     """
     Pac-Man specific NES environment that uses score from RAM as reward.
 
