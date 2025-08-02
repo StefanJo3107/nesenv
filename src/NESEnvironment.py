@@ -33,6 +33,7 @@ class NESEnvironment(gym.Env):
         rom_path: str,
         frame_skip: int = 4,
         frame_stack: int = 4,
+        time_between_frames: float = 0.1,
         grayscale: bool = True,
         resize_shape: Tuple[int, int] = (84, 84),
         max_episode_steps: int = 10000,
@@ -46,6 +47,7 @@ class NESEnvironment(gym.Env):
             rom_path: Path to the NES ROM file
             frame_skip: Number of frames to skip between actions
             frame_stack: Number of frames to stack in observation
+            time_between_frames: Time between getting frame data
             grayscale: Convert frames to grayscale
             resize_shape: Resize frames to this shape (height, width)
             max_episode_steps: Maximum steps per episode
@@ -57,6 +59,7 @@ class NESEnvironment(gym.Env):
         self.rom_path = rom_path
         self.frame_skip = frame_skip
         self.frame_stack = frame_stack
+        self.time_between_frames = time_between_frames
         self.grayscale = grayscale
         self.resize_shape = resize_shape
         self.max_episode_steps = max_episode_steps
@@ -224,7 +227,7 @@ class NESEnvironment(gym.Env):
         frames = []
         for _ in range(self.frame_skip):
             self.client.step()
-            if time.time() - self.last_frame_time > 0.1:
+            if time.time() - self.last_frame_time > self.time_between_frames:
                 frame = self.client.get_frame()
                 if frame is not None:
                     frames.append(frame)

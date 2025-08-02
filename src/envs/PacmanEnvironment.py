@@ -28,6 +28,7 @@ class PacmanEnvironment(NESEnvironment):
             rom_path: str,
             frame_skip: int = 4,
             frame_stack: int = 4,
+            time_between_frames: float = 0.1,
             grayscale: bool = True,
             resize_shape: Tuple[int, int] = (84, 84),
             max_episode_steps: int = 10000,
@@ -43,6 +44,7 @@ class PacmanEnvironment(NESEnvironment):
             rom_path: Path to the Pac-Man NES ROM file
             frame_skip: Number of frames to skip between actions
             frame_stack: Number of frames to stack in observation
+            time_between_frames: Time between getting frame data
             grayscale: Convert frames to grayscale
             resize_shape: Resize frames to this shape (height, width)
             max_episode_steps: Maximum steps per episode
@@ -65,6 +67,7 @@ class PacmanEnvironment(NESEnvironment):
             rom_path=rom_path,
             frame_skip=frame_skip,
             frame_stack=frame_stack,
+            time_between_frames=time_between_frames,
             grayscale=grayscale,
             resize_shape=resize_shape,
             max_episode_steps=max_episode_steps,

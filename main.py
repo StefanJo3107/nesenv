@@ -7,7 +7,7 @@ def test_pacman_environment():
 
     env = PacmanEnvironment(
         rom_path="/home/stefan/Dev/nesrs/assets/pacman-level1.cpu",
-        frame_skip=10000,
+        frame_skip=100000,
         frame_stack=1,
         score_reward_scale=0.01,
         life_penalty=-100.0,
