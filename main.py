@@ -53,16 +53,17 @@ def train_pacman_environment():
         rom_path="/home/stefan/Dev/nesrs/assets/pacman-level1.cpu",
         frame_skip=50000,
         frame_stack=2,
-        score_reward_scale=0.1,
+        score_reward_scale=0.5,
         life_penalty=-50.0,
         level_bonus=1000.0,
-        max_episode_steps=5000,
+        max_episode_steps=10000,
+        grayscale=False
     )
 
-    model = DQN("CnnPolicy", env, verbose=1, exploration_fraction=0.2,tensorboard_log="./pacman_tensorboard",buffer_size=50000)
+    model = DQN("CnnPolicy", env, verbose=1, exploration_fraction=0.2,tensorboard_log="./pacman_tensorboard",buffer_size=50000,learning_rate=5e-4)
 
     model.learn(
-        total_timesteps=500000,
+        total_timesteps=1000000,
         log_interval=4,
         progress_bar=True,
     )

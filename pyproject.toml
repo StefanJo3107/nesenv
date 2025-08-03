@@ -10,7 +10,8 @@ dependencies = [
   "numpy",
   "opencv-python",
   "stable-baselines3[extra]",
-  "tensorboad"
+  "tensorboard",
+  "nesrs"
 ]
 
 [tool.hatch.build.targets.wheel]

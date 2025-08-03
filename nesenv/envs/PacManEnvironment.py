@@ -15,6 +15,7 @@ class PacManEnvironment(NESEnvironment):
 
     LIVES_ADDRESS = 0x0067
     LEVEL_ADDRESS = 0x0068
+    REMAINING_PELLETS = 0x006A
     SCORE_ADDRESS_1 = 0x0070
     SCORE_ADDRESS_2 = 0x0071
     SCORE_ADDRESS_3 = 0x0072
@@ -32,6 +33,7 @@ class PacManEnvironment(NESEnvironment):
             resize_shape: Tuple[int, int] = (84, 84),
             max_episode_steps: int = 10000,
             score_reward_scale: float = 0.01,
+            pellets_reward_scale: float = 10,
             life_penalty: float = -100.0,
             level_bonus: float = 1000.0,
             action_map: Optional[List[List[int]]] = None,
@@ -75,10 +77,12 @@ class PacManEnvironment(NESEnvironment):
         )
 
         self.score_reward_scale = score_reward_scale
+        self.pellets_reward_scale = pellets_reward_scale
         self.life_penalty = life_penalty
         self.level_bonus = level_bonus
 
         self.previous_score = 0
+        self.previous_pellets = 0
         self.previous_lives = 3
         self.previous_level = 1
         self.game_over = False
@@ -127,6 +131,10 @@ class PacManEnvironment(NESEnvironment):
         """Read the current number of lives from RAM."""
         return self._read_ram_address(self.LIVES_ADDRESS)
 
+    def _get_pellets(self) -> int:
+        """Read the current number of pellets from RAM."""
+        return self._read_ram_address(self.REMAINING_PELLETS)
+
     def _get_level(self) -> int:
         """Read the current level from RAM."""
         return self._read_ram_address(self.LEVEL_ADDRESS)
@@ -151,6 +159,7 @@ class PacManEnvironment(NESEnvironment):
         current_score = self._get_score()
         current_lives = self._get_lives()
         current_level = self._get_level()
+        current_pellets = self._get_pellets()
 
         reward = 0.0
 
@@ -167,9 +176,13 @@ class PacManEnvironment(NESEnvironment):
             reward += self.level_bonus
             print(f"New level started! Level: {current_level}, Bonus: {self.level_bonus}")
 
+        if current_pellets < self.previous_pellets:
+            reward += (self.previous_pellets - current_pellets)*self.pellets_reward_scale
+
         self.previous_score = current_score
         self.previous_lives = current_lives
         self.previous_level = current_level
+        self.previous_pellets = current_pellets
 
         return reward
 
@@ -184,12 +197,14 @@ class PacManEnvironment(NESEnvironment):
         self.previous_score = self._get_score()
         self.previous_lives = self._get_lives()
         self.previous_level = self._get_level()
+        self.previous_pellets = self._get_pellets()
         self.game_over = False
 
         info.update({
             "score": self.previous_score,
             "lives": self.previous_lives,
             "level": self.previous_level,
+            "pellets": self.previous_pellets,
             "game_over": self.game_over,
         })
 
@@ -205,11 +220,13 @@ class PacManEnvironment(NESEnvironment):
         current_score = self._get_score()
         current_lives = self._get_lives()
         current_level = self._get_level()
+        current_pellets = self._get_pellets()
 
         info.update({
             "score": current_score,
             "lives": current_lives,
             "level": current_level,
+            "pellets": current_pellets,
             "game_over": self.game_over,
             "score_reward": (current_score - self.previous_score) * self.score_reward_scale,
         })
@@ -222,6 +239,7 @@ class PacManEnvironment(NESEnvironment):
             "score": self._get_score(),
             "lives": self._get_lives(),
             "level": self._get_level(),
+            "pellets": self._get_pellets(),
             "game_over": self._is_game_over(),
             "episode_step": self.episode_step,
             "total_reward": self.total_reward,
