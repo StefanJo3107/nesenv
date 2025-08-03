@@ -135,6 +135,9 @@ class PacManEnvironment(NESEnvironment):
         """Check if the game is over (no lives remaining)."""
         return self._get_lives() == 0
 
+    def _is_life_lost(self) -> bool:
+        return self._get_lives() < 3
+
     def _pacman_reward_function(self, _: np.ndarray, __: np.ndarray) -> float:
         """
         Pac-Man specific reward function based on score changes and game events.
@@ -197,7 +200,7 @@ class PacManEnvironment(NESEnvironment):
         observation, reward, terminated, truncated, info = super().step(action)
 
         self.game_over = self._is_game_over()
-        terminated = terminated or self.game_over
+        terminated = terminated or self._is_life_lost()
 
         current_score = self._get_score()
         current_lives = self._get_lives()

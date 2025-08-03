@@ -9,7 +9,8 @@ dependencies = [
   "gymnasium",
   "numpy",
   "opencv-python",
-  "stable-baselines3"
+  "stable-baselines3[extra]",
+  "tensorboad"
 ]
 
 [tool.hatch.build.targets.wheel]
