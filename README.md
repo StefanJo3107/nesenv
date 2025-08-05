@@ -33,7 +33,6 @@ cd nesenv
 ```bash
 pip install -e .
 ```
-4. Install package for emulator bindings through maurin (more info [here](https://github.com/StefanJo3107/nesrs/tree/master?tab=readme-ov-file#python-bindings))
 
 ## Usage
 ### Basic environment testing
