@@ -54,10 +54,10 @@ def train_pacman_environment():
         frame_skip=50000,
         frame_stack=2,
         score_reward_scale=0.5,
-        life_penalty=-50.0,
+        life_penalty=-20.0,
         level_bonus=1000.0,
         max_episode_steps=10000,
-        grayscale=False
+        resize_shape=(128,120)
     )
 
     model = DQN("CnnPolicy", env, verbose=1, exploration_fraction=0.2,tensorboard_log="./pacman_tensorboard",buffer_size=50000,learning_rate=5e-4)
@@ -88,7 +88,6 @@ def test_model(model, env, episodes=5):
             total_reward += reward
             steps += 1
 
-            # Print progress every 100 steps
             if steps % 100 == 0:
                 print(f"Step {steps} - Score: {info.get('score', 0)}, "
                       f"Lives: {info.get('lives', 0)}, Reward: {reward:.2f}")

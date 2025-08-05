@@ -233,17 +233,18 @@ class NESEnvironment(gym.Env):
         reward = self.reward_function(current_frame, self.last_frame)
         self.total_reward += reward
 
-        processed_frame = self._preprocess_frame(current_frame)
-        self.frame_buffer.append(processed_frame)
-        if len(self.frame_buffer) > self.frame_stack:
-            self.frame_buffer.pop(0)
+        if current_frame is not None:
+            processed_frame = self._preprocess_frame(current_frame)
+            self.frame_buffer.append(processed_frame)
+            if len(self.frame_buffer) > self.frame_stack:
+                self.frame_buffer.pop(0)
+
+            self.last_frame = current_frame
 
         observation = self._get_observation()
 
         terminated = False
         truncated = self.episode_step >= self.max_episode_steps
-
-        self.last_frame = current_frame
 
         info = {
             "episode_step": self.episode_step,

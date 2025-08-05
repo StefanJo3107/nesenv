@@ -4,7 +4,7 @@ import numpy as np
 import nesrs
 
 class NESEmulatorClient:
-    """Python client for communicating with the Rust NES emulator server via shared memory."""
+    """Python client for communicating with the Rust NES emulator server via nesrs Python bindings."""
     VALID_KEYS = [1, 2, 4, 8, 16, 32, 64, 128]
 
     def __init__(self):
